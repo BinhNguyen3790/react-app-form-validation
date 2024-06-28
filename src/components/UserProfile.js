@@ -3,23 +3,51 @@ import "../components/UserProfile.css";
 
 class UserProfile extends Component {
   state = {
-    firstname: "",
-    lastname: "",
-    username: "",
-    email: "",
-    password: "",
-    passwordConfirm: "",
+    values: {
+      firstname: "",
+      lastname: "",
+      username: "",
+      email: "",
+      password: "",
+      passwordConfirm: "",
+    },
+    errors: {
+      firstname: "",
+      lastname: "",
+      username: "",
+      email: "",
+      password: "",
+      passwordConfirm: "",
+    },
   };
   handleChange = (e) => {
     let { name, value } = e.target;
-    this.setState(
-      {
-        [name]: value,
-      },
-      () => {
-        console.log(this.state);
+    let newValues = { ...this.state.values, [name]: value };
+    let newErrors = { ...this.state.errors };
+
+    if (value.trim() === "") {
+      newErrors[name] = name + " is required!";
+    }
+    if (name === "email") {
+      const resges = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!resges.test(value)) {
+        newErrors[name] = name + " is invalid!";
+      } else {
+        newErrors[name] = "";
       }
-    );
+    }
+    if (name === "passwordConfirm") {
+      if (value === newValues["password"]) {
+        newErrors[name] = "";
+      } else {
+        newErrors[name] = name + " is invalid!";
+      }
+    }
+
+    this.setState({
+      values: newValues,
+      errors: newErrors,
+    });
   };
   render() {
     return (
@@ -30,50 +58,56 @@ class UserProfile extends Component {
             <div className="row">
               <div className="col-6">
                 <div className="group">
-                  <input type="text" name="firstname" required onChange={this.handleChange} />
+                  <input type="text" name="firstname" required value={this.state.values.firstname} onChange={this.handleChange} />
                   <span className="hightlight" />
                   <span className="bar" />
                   <label>First Name</label>
+                  <span className="text text-danger">{this.state.errors.firstname}</span>
                 </div>
               </div>
               <div className="col-6">
                 <div className="group">
-                  <input type="text" name="lastname" required onChange={this.handleChange} />
+                  <input type="text" name="lastname" required value={this.state.values.lastname} onChange={this.handleChange} />
                   <span className="hightlight" />
                   <span className="bar" />
                   <label>Last Name</label>
+                  <span className="text text-danger">{this.state.errors.lastname}</span>
                 </div>
               </div>
               <div className="col-12">
                 <div className="group">
-                  <input type="text" name="username" required onChange={this.handleChange} />
+                  <input type="text" name="username" required value={this.state.values.username} onChange={this.handleChange} />
                   <span className="hightlight" />
                   <span className="bar" />
                   <label>User Name</label>
+                  <span className="text text-danger">{this.state.errors.username}</span>
                 </div>
               </div>
               <div className="col-12">
                 <div className="group">
-                  <input type="email" name="email" required onChange={this.handleChange} />
+                  <input type="email" name="email" required value={this.state.values.email} onChange={this.handleChange} />
                   <span className="hightlight" />
                   <span className="bar" />
                   <label>Email</label>
+                  <span className="text text-danger">{this.state.errors.email}</span>
                 </div>
               </div>
               <div className="col-6">
                 <div className="group">
-                  <input type="text" name="password" required onChange={this.handleChange} />
+                  <input type="password" name="password" required value={this.state.values.password} onChange={this.handleChange} />
                   <span className="hightlight" />
                   <span className="bar" />
                   <label>Password</label>
+                  <span className="text text-danger">{this.state.errors.password}</span>
                 </div>
               </div>
               <div className="col-6">
                 <div className="group">
-                  <input type="text" name="passwordConfirm" required onChange={this.handleChange} />
+                  <input type="password" name="passwordConfirm" required value={this.state.values.passwordConfirm} onChange={this.handleChange} />
                   <span className="hightlight" />
                   <span className="bar" />
                   <label>Password Confirm</label>
+                  <span className="text text-danger">{this.state.errors.passwordConfirm}</span>
                 </div>
               </div>
             </div>
