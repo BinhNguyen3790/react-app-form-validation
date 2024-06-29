@@ -49,12 +49,33 @@ class UserProfile extends Component {
       errors: newErrors,
     });
   };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    let { values, errors } = this.state;
+    let valid = true;
+    for (let key in values) {
+      if (values[key] === "") {
+        valid = false;
+      }
+    }
+    for (let key in errors) {
+      if (errors[key] !== "") {
+        valid = false;
+      }
+    }
+    if (!valid) {
+      alert("data false!");
+      return;
+    }
+    alert("success");
+  };
   render() {
     return (
       <div className="p-5 bg-light vh-100">
         <h1 className="text-center mb-5">Use Profile</h1>
         <div className="container">
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <div className="row">
               <div className="col-6">
                 <div className="group">
