@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Swal from "sweetalert2";
 import "../components/UserProfile.css";
 
 class UserProfile extends Component {
@@ -54,21 +55,39 @@ class UserProfile extends Component {
     e.preventDefault();
     let { values, errors } = this.state;
     let valid = true;
+    let profileContent = "";
+    let errorContent = "";
     for (let key in values) {
       if (values[key] === "") {
         valid = false;
       }
+      profileContent += `
+      <p class="text-left"><b>${key}</b>${values[key]}</p>
+      `;
     }
     for (let key in errors) {
       if (errors[key] !== "") {
         valid = false;
+        errorContent += `
+      <p class="text-left"><b class="text-danger">${key} is invalid!</b></p>
+      `;
       }
     }
     if (!valid) {
-      alert("data false!");
+      Swal.fire({
+        title: "your profile",
+        html: errorContent,
+        icon: "error",
+        confirmButtonText: "close",
+      });
       return;
     }
-    alert("success");
+    Swal.fire({
+      title: "your profile",
+      html: profileContent,
+      icon: "success",
+      confirmButtonText: "close",
+    });
   };
   render() {
     return (
